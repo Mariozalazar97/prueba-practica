@@ -20,7 +20,7 @@ const Login = async (req, res) => {
 
     res.cookie("sesion", token, { maxAge: 900000, httpOnly: true });
 
-    res.status(200).json({ message: "login exitoso" });
+    res.status(200).json({ message: "login user exitoso" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "error en el login" });
