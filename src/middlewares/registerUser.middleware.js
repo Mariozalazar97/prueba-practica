@@ -15,6 +15,7 @@ const registroDeUsuario = async (res, req) => {
       expiresIn: "2h",
     });
     res.status(201).send({ message: "usuario registrado exitosamente" });
+    console.log(token);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "error al registrar" });
