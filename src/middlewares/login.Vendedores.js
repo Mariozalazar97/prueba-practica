@@ -4,17 +4,17 @@ const LoginVendedor = async (req, res) => {
   const { clave, password } = req.body;
 
   try {
-    const Vendedor = await Vendedor.findOne({ clave });
-    if (!Vendedor) {
-      return res.status(400).json({ message: "vendedor no encontrado" });
+    const vendedor = await vendedor.findOne({ clave });
+    if (!vendedor) {
+      return res.status(404).json({ message: "vendedor no encontrado" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, Vendedor.password);
+    const isPasswordValid = await bcrypt.compare(password, vendedor.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "contraseña incorrecta" });
     }
 
-    const token = jwt.sign({ vendedorId: Vendedor._id }, JWT_SECRET, {
+    const token = jwt.sign({ vendedorId: vendedor._id }, JWT_SECRET, {
       expiresIn: "5h",
     });
 

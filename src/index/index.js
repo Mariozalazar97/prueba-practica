@@ -1,20 +1,9 @@
 const express = require("express");
-const morgan = require("morgan");
-const { connectDB } = require("../db");
+const App = require("../app");
 
 const app = express();
-
-app.use(morgan("dev"));
-app.use(express.json());
-
-//base de datos
-connectDB();
-console.log("dataBase connected");
-
-//entrega todos los archivos de este directorio
-app.use(express.static("src"));
-
 //montando servidor
-app.listen(8080);
-console.log("server on port, viva la argoyaa", 8080);
-module.exports = app;
+const PORT = 8080;
+app.listen(PORT, () => {
+  console.log("server on port 8080", PORT);
+});
