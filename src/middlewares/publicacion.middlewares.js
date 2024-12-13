@@ -1,25 +1,28 @@
+const newPublicacion = require("../models/publicacion.models");
+const jwt = require("jsonwebtoken");
+const decode = require("cookie-parser");
+
 const Publicacion = async (req, res) => {
-  console.log(jwt.decode(req.cookies.sesion));
-
-  const { userId: owner } = jwt.decode(req.cookies.sesion);
-  const { title, message } = req.body;
   try {
-    if (!mongoose.Types.ObjectId.isValid(owner)) {
-      return res.status(400).json({ message: "el id no es bueno" });
+    const token = req.cookies.session;
+    if (!token) {
+      return res.status(403).json({ message: "no hay acceso" });
     }
+    const decodedToken = jwt.verify(token, JWT_SECRET);
+    const { userId: owner } = decodedToken;
 
-    console.log({
-      owner,
-      title,
-      message,
-    });
+    const { title, message } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(owner)) {
+      return res.status(400).json({ message: "el id no es valid" });
+    }
 
     const publicacionEsValida = await User.findById(owner);
     if (!publicacionEsValida) {
       return res.status(400).json({ message: "revisar usuario" });
     }
 
-    const nuevaPublicacion = newPublicacion({
+    const nuevaPublicacion = new newPublicacion({
       title: req.body.title,
       message: req.body.message,
       owner: owner,
@@ -35,4 +38,4 @@ const Publicacion = async (req, res) => {
   }
 };
 
-module.exports = { nuevaPublicacion, publicacionEsValida, Publicacion };
+module.exports = Publicacion;

@@ -1,25 +1,27 @@
-const nuevoUser = require("../models/user.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.models");
 
+const JWT_SECRET = "viva_el_amor";
+
 const registroDeUsuario = async (req, res) => {
   const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).send({ message: "todos los campos son necesarios" });
-  }
-  res.status(201).send({ message: "usuario registrado" });
   try {
+    if (!username || !email || !password) {
+      return res
+        .status(400)
+        .send({ message: "todos los campos son obligatorios" });
+    }
     const HashedPassword = await bcrypt.hash(password, 10);
 
-    const nuevoUser = new User({
+    const newUser = new User({
       username: req.body.username,
       email: req.body.email,
       password: HashedPassword,
     });
-    await nuevoUser.save();
+    const savedUser = await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: savedUser._id }, JWT_SECRET, {
       expiresIn: "2h",
     });
     res.status(201).send({ message: "usuario registrado exitosamente" });
