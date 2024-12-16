@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8/" />
+    <title>Productos</title>
+    <link href="/src/css/index.css" rel="sytlesheet" />
+  </head>
+  <body>
+    <h1>Ingrese su nuevo producto</h1>
+
+    <form id="postForm">
+      <label for="title"> ingrese el nombre del producto </label>
+      <input type="text" id="title" required /><br />
+
+      <label for="message"> ingrese informacion del producto</label>
+      <textarea id="message" required></textarea><br />
+
+      <button type="submit">INGRESAR</button>
+    </form>
+
+    <div id="postConteiner">
+      <h2>POST ENVIADOS</h2>
+      <ul id="postList"></ul>
+    </div>
+
+    <ul>
+      <% for (let post of postList) { %>
+
+      <li><%= post.title %></li>
+      <% } %>
+    </ul>
+
+    <script>
+      document
+        .getElementById("postForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const title = document.getElementById("title").value;
+          const message = document.getElementById("message").value;
+
+          fetch("http://localhost:8080/nuevapublicacion", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ title, message }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("error al ingresar el producto");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              alert(data.message);
+              agregarPost(title, message);
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        });
+
+      function agregarPost(title, message) {
+        const postsList = document.getElementById("postList");
+        const postItem = document.createElement("li");
+        postItem.innerHTML = `<strong>${title}</strong>: ${message}`;
+        postsList.appendChild(postItem);
+        document.getElementById("postForm");
+      }
+    </script>
+  </body>
+</html>

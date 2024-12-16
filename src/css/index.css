@@ -1,0 +1,11 @@
+body {
+  background-color: #1a4bfa;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.mi-clase {
+  color: red;
+  text-align: center;
+}

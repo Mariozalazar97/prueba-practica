@@ -6,8 +6,11 @@ const { Router } = require("express");
 const express = require("express");
 const Publicacion = require("./middlewares/publicacion.middlewares");
 const cookieParser = require("cookie-parser");
+const ejs = require("ejs");
 
 const app = express();
+
+app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(morgan("dev"));
